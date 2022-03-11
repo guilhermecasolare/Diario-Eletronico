@@ -5,14 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <style>
+        #esquecibot{
+            text-decoration: underline;
+            color: blue;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <form action="login.php" method="post">
+    <form action="login.php" method="post" id="login">
         <input type="text" placeholder="Usuário" name="usuario">
         <input type="password" placeholder="Senha" name="senha">
         <input type="submit">
-    </form>    
-
+        <a href="esqueciForm.php"><p id="esquecibot">Esqueci minha senha</p></a>
+    </form> 
 
 </body>
 </html>
