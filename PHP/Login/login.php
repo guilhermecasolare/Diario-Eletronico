@@ -16,17 +16,17 @@ $sql = "SELECT `senha`, `nome`, `nivel`, `ativo` FROM `login` WHERE (`usuario` =
 $query = mysqli_query($mysql,$sql);
 $dados = mysqli_fetch_assoc($query);
 
-//Verifica se é professor ou admin
-if(isset($dados)){
-if($dados['nivel'] == 2){
-    $nivel = "Admin";
-}else{
-    $nivel = "Professor";
-}
-}
 //Saída
 
 if(mysqli_num_rows($query)==1){
+
+    //Verifica se é professor ou admin
+    if($dados['nivel'] == 2){
+        $nivel = "Admin";
+    }else{
+        $nivel = "Professor";
+    }
+
     echo "Bem-vindo, ".$nivel." ".$dados['nome'];
 }else{
     echo "USUÁRIO OU SENHA INVALIDO";
