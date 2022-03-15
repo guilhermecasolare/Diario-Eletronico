@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 10-Mar-2022 às 22:05
--- Versão do servidor: 10.1.37-MariaDB
--- versão do PHP: 5.6.40
+-- Tempo de geração: 15-Mar-2022 às 21:44
+-- Versão do servidor: 10.4.22-MariaDB
+-- versão do PHP: 8.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,8 +18,18 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `diario`
+-- Banco de dados: `diario`
 --
+
+DELIMITER $$
+--
+-- Procedimentos
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_rows_links` ()  BEGIN
+       DELETE FROM troca_de_senha WHERE DATA < DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL -6 HOUR);
+     END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -43,30 +52,59 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`id`, `nome`, `usuario`, `senha`, `email`, `nivel`, `ativo`) VALUES
-(1, 'Rafael de Oliveira Sigolo', 'RafaelOliveira', 'teste123', 'rafaeloliveirasigolo@gmail.com', 1, 1),
+(1, 'Rafael de Oliveira Sigolo', 'RafaelOliveira', 'teste321', 'rafaeloliveirasigolo@gmail.com', 1, 1),
 (2, 'Robert Costa Fernandes Pinto', 'RobertCosta', 'teste321', 'RobertCosta@gmail.com', 2, 1),
-(3, 'Demitido de fazertanta merda', 'Demitido', 'teste333', 'Demitidodefazertantamerda@gmail.com', 2, 0);
+(3, 'Demitido de fazertanta merda', 'Demitido', 'teste333', 'Demitidodefazertantamerda@gmail.com', 2, 0),
+(4, 'Vinicius Machado', 'vini', 'vini123', 'machadodasilvavinicius599@gmail.com', 2, 1),
+(5, 'teste', 'teste', '/teste', 'teste@gmail.com', 2, 1),
+(6, 'sla', 'sla', 'Á-!^~][+{-.?ç^´´]', 'sla@gmail.com', 2, 1);
+
+-- --------------------------------------------------------
 
 --
--- Indexes for dumped tables
+-- Estrutura da tabela `troca_de_senha`
+--
+
+CREATE TABLE `troca_de_senha` (
+  `email` varchar(50) NOT NULL,
+  `codigo` varchar(40) NOT NULL,
+  `data` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Índices para tabelas despejadas
 --
 
 --
--- Indexes for table `login`
+-- Índices para tabela `login`
 --
 ALTER TABLE `login`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `usuario` (`usuario`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Índices para tabela `troca_de_senha`
+--
+ALTER TABLE `troca_de_senha`
+  ADD UNIQUE KEY `emailuk` (`email`);
+
+--
+-- AUTO_INCREMENT de tabelas despejadas
 --
 
 --
--- AUTO_INCREMENT for table `login`
+-- AUTO_INCREMENT de tabela `login`
 --
 ALTER TABLE `login`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+DELIMITER $$
+--
+-- Eventos
+--
+CREATE DEFINER=`root`@`localhost` EVENT `myevent` ON SCHEDULE EVERY 5 SECOND STARTS '2022-03-12 18:04:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL delete_rows_links()$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,16 +1,14 @@
 <?php
 
+$cod = uniqid(rand());
+$email = $_POST['email'];
 
 //Importar PHPMailer
 use PHPMailer\PHPMailer\PHPMailer;
 
-require 'PHPMailer-master/src/PHPmailer.php';
-require 'PHPMailer-master/src/SMTP.php';
-require 'PHPMailer-master/src/Exception.php';
-
-//Receber dado por POST
-
-$email = $_POST['email'];
+require 'PHPMailer-6.6.0/src/PHPmailer.php';
+require 'PHPMailer-6.6.0/src/SMTP.php';
+require 'PHPMailer-6.6.0/src/Exception.php';
 
 //Conecta no banco de dados
 
@@ -19,7 +17,7 @@ mysqli_select_db($mysql,'diario');
 
 //Recebe dados
 
-$sql = "SELECT `nome`, `email`, `ativo` FROM `login` WHERE (`email` = '".$email."') AND (`ativo` = 1)";
+$sql = "SELECT `usuario`, `email`, `ativo` FROM `login` WHERE (`email` = '".$email."') AND (`ativo` = 1)";
 $query = mysqli_query($mysql,$sql);
 $dados = mysqli_fetch_assoc($query);
 
@@ -27,6 +25,9 @@ $dados = mysqli_fetch_assoc($query);
 
 if(mysqli_num_rows($query)==1){
 
+//Insere dados
+$inserir = "INSERT INTO `troca_de_senha` (`email`, `codigo`, `data`) VALUES ('$email', '$cod', current_timestamp());";
+$queryinserir = mysqli_query($mysql,$inserir);
 
 //Cria nova instancia
 
@@ -56,11 +57,11 @@ $mail->SMTPAuth = true;
 
 //Email que vai enviar
 
-$mail->Username /* = "email"*/;
+$mail->Username //= "mousessmails@gmail.com";
 
 //Senha do Email
 
-$mail->Password /* = "senha"*/;
+$mail->Password //= "senha";
 
 //Remetente
 
@@ -68,7 +69,7 @@ $mail->setFrom('mousessmails@gmail.com', 'MouseSS');
 
 //Destinatário
 
-$mail->addAddress($dados['email'], 'Rafael de Oliveira Sigolo');
+$mail->addAddress($dados['email'], $dados['nome']);
 
 //Assunto
 
@@ -80,13 +81,13 @@ $mail->Subject = 'Recuperação de senha - Diário Eletrônico';
 
 //Corpo do Email
 
-$mail->Body = 'Olá, '.$dados['nome'].'
+$mail->Body = 'Olá, '.$dados['usuario'].'
 
 Você solicitou alteração de sua senha.
 
 Clique no link abaixo para alterá-la. Caso não tenha realizado tal solicitação, por favor, desconsidere esse e-mail.
 
-LINK
+26.89.240.80/login/recuperarform.php?cod='.$cod.'
 
 Atenciosamente,
 
