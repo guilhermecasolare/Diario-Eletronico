@@ -57,11 +57,11 @@ $mail->SMTPAuth = true;
 
 //Email que vai enviar
 
-$mail->Username //= "mousessmails@gmail.com";
+$mail->Username = "mousessmails@gmail.com";
 
 //Senha do Email
 
-$mail->Password //= "senha";
+$mail->Password = //senha;
 
 //Remetente
 
@@ -69,7 +69,7 @@ $mail->setFrom('mousessmails@gmail.com', 'MouseSS');
 
 //Destinatário
 
-$mail->addAddress($dados['email'], $dados['nome']);
+$mail->addAddress($dados['email'], $dados['usuario']);
 
 //Assunto
 
